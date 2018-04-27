@@ -11,31 +11,66 @@ class App extends Component {
       user: {
         name: '',
         city: '',
+        zip: '',
       }
     };
 
     // makes the `this` from handleChange function
     // the same as the `this` from the constructor
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleCityChange = this.handleCityChange.bind(this);
+    // this.handleNameChange = this.handleNameChange.bind(this);
+    // this.handleCityChange = this.handleCityChange.bind(this);
+    // this.handleZipChange = this.handleZipChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
-  handleNameChange(event) {
-    console.log(event.target.value);
-    // this.state.user = event.target.value;
-    this.setState({ 
+  // handleNameChange(event) {
+  //   console.log(event.target.value);
+  //   // this.state.user = event.target.value;
+  //   this.setState({ 
+  //     user: {
+  //       ...this.state.user,
+  //       name: event.target.value,
+  //     }
+  //   });
+  // }
+
+  // handleCityChange(event) {
+  //   this.setState({ 
+  //     user: {
+  //       ...this.state.user,
+  //       city: event.target.value,
+  //     }
+  //   });
+  // }
+
+  // handleZipChange(event) {
+  //   this.setState({
+  //     user: {
+  //       ...this.state.user,
+  //       zip: event.target.value,
+  //     }
+  //   })
+  // }
+
+  // currying
+  handleChangeFor = (propertyName) => (event) => {
+    this.setState({
       user: {
-        name: event.target.value,
-        city: this.state.user.city,
+        ...this.state.user,
+        [propertyName]: event.target.value,
       }
     });
   }
 
-  handleCityChange(event) {
-    this.setState({ 
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.user);
+    this.setState({
       user: {
-        name: this.state.user.name,
-        city: event.target.value,
+        name: '',
+        city: '',
+        zip: '',
       }
     });
   }
@@ -45,11 +80,13 @@ class App extends Component {
       <div className="App">
         <Header />
         <Instructions />
-        <p>
-          <input onChange={this.handleNameChange} />
-          <input onChange={this.handleCityChange} />
-          {this.state.user.name} is from {this.state.user.city}
-        </p>
+        <form onSubmit={this.handleSubmit}>
+          <input value={this.state.user.name} onChange={this.handleChangeFor('name')} />
+          <input value={this.state.user.city} onChange={this.handleChangeFor('city')} />
+          <input value={this.state.user.zip} onChange={this.handleChangeFor('zip')} />
+          <input type='submit' value='Submit the Form' />
+          {this.state.user.name} is from {this.state.user.city}, {this.state.user.zip}
+        </form>
         <p>The user is: {this.state.user.name}</p>
       </div>
     );
